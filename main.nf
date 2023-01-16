@@ -34,6 +34,7 @@ workflow {
         ch_fastpJson    = TrimReads.out.fastpJson
     } else {
         ch_readsTrimmed = Channel.empty()
+        ch_fastpJson    = Channel.empty()
     }
 
 
