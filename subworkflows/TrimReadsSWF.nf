@@ -11,4 +11,5 @@ workflow TrimReadsSWF {
 
     emit:
         readsTrimmed = Fastp.out.readsTrimmed
+        fastpJson    = Fastp.out.fastpJson
 }

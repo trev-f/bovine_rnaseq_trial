@@ -8,6 +8,7 @@ process Fastp {
     
     output:
         tuple val(metadata.sampleName), path('*.fastq.gz'), emit: readsTrimmed
+        path ('*fastp.json'), emit: fastpJson
     
     script:
         """
@@ -15,7 +16,8 @@ process Fastp {
             --thread ${task.cpus} \
             -i ${reads[0]} \
             -I ${reads[1]} \
-            -o {metadta.sampleName}_trimmed_R1.fastq.gz \
-            -O {metadta.sampleName}_trimmed_R2.fastq.gz
+            -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
+            -O ${metadata.sampleName}_trimmed_R2.fastq.gz \
+            -j ${metadata.sampleName}_fastp.json
         """
 }

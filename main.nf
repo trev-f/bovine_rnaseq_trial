@@ -31,6 +31,7 @@ workflow {
             ch_readsRaw
         )
         ch_readsTrimmed = TrimReads.out.readsTrimmed
+        ch_fastpJson    = TrimReads.out.fastpJson
     } else {
         ch_readsTrimmed = Channel.empty()
     }
@@ -61,6 +62,7 @@ workflow {
 
     ch_fullMultiQC = Channel.empty()
         .concat(ch_readsRawFQC)
+        .concat(ch_fastpJson)
 
     FullMultiQC(
         ch_fullMultiQC.collect()
