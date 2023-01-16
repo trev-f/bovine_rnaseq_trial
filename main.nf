@@ -15,7 +15,7 @@ workflow {
     ParseDesign(
         file(params.design)
     )
-    ch_readsRaw = ParseDesign.out.samples.view()
+    ch_readsRaw = ParseDesign.out.samples
 
 
     /*
