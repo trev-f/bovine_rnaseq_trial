@@ -1,6 +1,7 @@
 nextflow.enable.dsl=2
 
 include { ParseDesignSWF as ParseDesign } from "${projectDir}/subworkflows/ParseDesignSWF.nf"
+include { TrimReadsSWF   as TrimReads   } from "${projectDir}/subworkflows/TrimReadsSWF.nf"
 include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
@@ -16,6 +17,23 @@ workflow {
         file(params.design)
     )
     ch_readsRaw = ParseDesign.out.samples
+
+
+    /*
+    ---------------------------------------------------------------------
+        Trim raw reads
+    ---------------------------------------------------------------------
+    */
+
+    if (!params.skipTrimReads) {
+        // Subworkflow: Trim raw reads
+        TrimReads(
+            ch_readsRaw
+        )
+        ch_readsTrimmed = TrimReads.out.readsTrimmed
+    } else {
+        ch_readsTrimmed = Channel.empty()
+    }
 
 
     /*
