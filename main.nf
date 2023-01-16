@@ -2,6 +2,7 @@ nextflow.enable.dsl=2
 
 include { ParseDesignSWF as ParseDesign } from "${projectDir}/subworkflows/ParseDesignSWF.nf"
 include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
+include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
 workflow {
@@ -32,4 +33,18 @@ workflow {
     } else {
         ch_readsRawFQC = Channel.empty()
     }
+
+
+    /*
+    ---------------------------------------------------------------------
+        Full pipeline MultiQC
+    ---------------------------------------------------------------------
+    */
+
+    ch_fullMultiQC = Channel.empty()
+        .concat(ch_readsRawFQC)
+
+    FullMultiQC(
+        ch_fullMultiQC.collect()
+    )
 }
