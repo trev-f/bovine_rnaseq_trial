@@ -1,6 +1,8 @@
 process FastQC {
     tag "${metadata.sampleName}"
 
+    label 'mem_low'
+
     container 'biocontainers/fastqc:v0.11.9_cv8'
 
     input:

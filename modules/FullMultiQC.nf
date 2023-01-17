@@ -1,6 +1,9 @@
 process FullMultiQC {
     tag "FullMultiQC"
 
+    label 'cpu_low'
+    label 'mem_low'
+
     container 'ewels/multiqc:v1.11'
 
     publishDir "${params.baseDirReports}", mode: 'copy', pattern: '*.html'
