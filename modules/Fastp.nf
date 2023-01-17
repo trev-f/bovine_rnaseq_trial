@@ -7,7 +7,7 @@ process Fastp {
         tuple val(metadata), file(reads)
     
     output:
-        tuple val(metadata.sampleName), path('*.fastq.gz'), emit: readsTrimmed
+        tuple val(metadata), path('*.fastq.gz'), emit: readsTrimmed
         path ('*fastp.json'), emit: fastpJson
     
     script:

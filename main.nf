@@ -47,11 +47,14 @@ workflow {
     if (!params.skipReadsQC) {
         // Subworkflow: FastQC for raw reads
         ReadsQC(
-            ch_readsRaw
+            ch_readsRaw,
+            ch_readsTrimmed
         )
-        ch_readsRawFQC = ReadsQC.out.raw_fqc_zip
+        ch_readsRawFQC     = ReadsQC.out.raw_fqc_zip
+        ch_readsTrimmedFQC = ReadsQC.out.trim_fqc_zip
     } else {
-        ch_readsRawFQC = Channel.empty()
+        ch_readsRawFQC     = Channel.empty()
+        ch_readsTrimmedFQC = Channel.empty()
     }
 
 
@@ -62,8 +65,9 @@ workflow {
     */
 
     ch_fullMultiQC = Channel.empty()
-        .concat(ch_readsRawFQC)
         .concat(ch_fastpJson)
+        .concat(ch_readsRawFQC)
+        .concat(ch_readsTrimmedFQC)
 
     FullMultiQC(
         ch_fullMultiQC.collect()
