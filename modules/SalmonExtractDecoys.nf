@@ -1,4 +1,4 @@
-process SalmonDecoy {
+process SalmonExtractDecoys {
     // this script does not actually invoke Salmon, so a lighter weight container could probably be used here
     container 'quay.io/biocontainers/salmon:1.9.0--h7e5ed60_1'
 

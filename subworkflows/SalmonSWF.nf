@@ -1,4 +1,4 @@
-include { SalmonDecoy } from "${projectDir}/modules/SalmonDecoy.nf"
+include { SalmonExtractDecoys } from "${projectDir}/modules/SalmonExtractDecoys.nf"
 
 workflow SalmonSWF {
     take:
@@ -6,9 +6,9 @@ workflow SalmonSWF {
         genome
     
     main:
-        SalmonDecoy(
+        SalmonExtractDecoys(
             assembly,
             genome
         )
-        ch_decoys = SalmonDecoy.out.decoys
+        ch_decoys = SalmonExtractDecoys.out.decoys
 }
