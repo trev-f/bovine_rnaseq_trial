@@ -68,7 +68,8 @@ workflow {
     Salmon(
         params.assembly,
         file(params.transcriptome),
-        file(params.genome)
+        file(params.genome),
+        ch_readsTrimmed
     )
 
     /*
