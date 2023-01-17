@@ -9,7 +9,7 @@ process SalmonDecoy {
         path genome
 
     output:
-        path '*'
+        path '*decoys.txt', emit: decoys
 
     script:
         """

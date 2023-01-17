@@ -10,4 +10,5 @@ workflow SalmonSWF {
             assembly,
             genome
         )
+        ch_decoys = SalmonDecoy.out.decoys
 }
