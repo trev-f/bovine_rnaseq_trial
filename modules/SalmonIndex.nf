@@ -1,6 +1,9 @@
 process SalmonIndex {
     container 'quay.io/biocontainers/salmon:1.9.0--h7e5ed60_1'
 
+    label 'cpu_mid'
+    label 'mem_high'
+
     publishDir "${params.baseDirData}/salmon_index", mode: 'copy', pattern: '*'
 
     input:
