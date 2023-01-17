@@ -1,8 +1,8 @@
 process FullMultiQC {
     tag "FullMultiQC"
 
-    label 'cpu_low'
-    label 'mem_low'
+    label 'cpu_mid'
+    label 'mem_mid'
     label 'time_low'
 
     container 'ewels/multiqc:v1.11'
