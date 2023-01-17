@@ -21,7 +21,7 @@ def createInputChannel(LinkedHashMap row) {
     metadata.sampleName = row.sampleName
 
     // store reads in a list
-    def reads = [file(row.reads1), file(row.reads2)]
+    def reads = [file(row.reads1, checkIfExists: true), file(row.reads2, checkIfExists: true)]
 
     return [metadata, reads]
 }
