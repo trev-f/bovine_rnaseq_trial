@@ -3,6 +3,7 @@ process FullMultiQC {
 
     label 'cpu_low'
     label 'mem_low'
+    label 'time_low'
 
     container 'ewels/multiqc:v1.11'
 
