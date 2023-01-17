@@ -1,5 +1,6 @@
 include { SalmonExtractDecoys                  } from "${projectDir}/modules/SalmonExtractDecoys.nf"
 include { SalmonConcatenateTranscriptomeGenome } from "${projectDir}/modules/SalmonConcatenateTranscriptomeGenome.nf"
+include { SalmonIndex                          } from "${projectDir}/modules/SalmonIndex.nf"
 
 workflow SalmonSWF {
     take:
@@ -8,6 +9,11 @@ workflow SalmonSWF {
         genome
     
     main:
+        /*
+        ---------------------------------------------------------------------
+            prepare metadata
+        ---------------------------------------------------------------------
+        */
         SalmonExtractDecoys(
             assembly,
             genome
@@ -20,4 +26,15 @@ workflow SalmonSWF {
             genome
         )
         ch_gentrome = SalmonConcatenateTranscriptomeGenome.out.gentrome
+
+        /*
+        ---------------------------------------------------------------------
+            prepare metadata
+        ---------------------------------------------------------------------
+        */
+        SalmonIndex(
+            assembly,
+            ch_gentrome,
+            ch_decoys
+        )
 }
