@@ -67,6 +67,7 @@ workflow {
 
     Salmon(
         params.assembly,
+        file(params.transcriptome),
         file(params.genome)
     )
 
