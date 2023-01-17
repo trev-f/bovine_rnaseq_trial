@@ -3,6 +3,7 @@ nextflow.enable.dsl=2
 include { ParseDesignSWF as ParseDesign } from "${projectDir}/subworkflows/ParseDesignSWF.nf"
 include { TrimReadsSWF   as TrimReads   } from "${projectDir}/subworkflows/TrimReadsSWF.nf"
 include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
+include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/SalmonSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -57,6 +58,17 @@ workflow {
         ch_readsTrimmedFQC = Channel.empty()
     }
 
+
+    /*
+    ---------------------------------------------------------------------
+        Salmon
+    ---------------------------------------------------------------------
+    */
+
+    Salmon(
+        params.assembly,
+        file(params.genome)
+    )
 
     /*
     ---------------------------------------------------------------------
