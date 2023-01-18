@@ -2,7 +2,7 @@ process SalmonConcatenateTranscriptomeGenome {
     // this script does not actually invoke Salmon, so a lighter weight container could probably be used here
     container 'quay.io/biocontainers/salmon:1.9.0--h7e5ed60_1'
 
-    publishDir "${params.baseDirData}/salmon_cat", mode: 'copy', pattern: '*'
+    storeDir "${params.baseDirData}/references/${assembly}"
 
     input:
         val assembly

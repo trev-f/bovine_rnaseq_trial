@@ -4,7 +4,7 @@ process SalmonIndex {
     label 'cpu_mid'
     label 'mem_high'
 
-    publishDir "${params.baseDirData}/salmon_index", mode: 'copy', pattern: '*'
+    storeDir "${params.baseDirData}/references/${assembly}/salmon_index"
 
     input:
         val assembly
