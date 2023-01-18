@@ -1,4 +1,5 @@
-include { Fastp } from "${projectDir}/modules/Fastp.nf"
+include { Fastp                               } from "${projectDir}/modules/Fastp.nf"
+include { MultiQCIntermediate as FastpMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
 workflow TrimReadsSWF {
     take:
@@ -7,6 +8,11 @@ workflow TrimReadsSWF {
     main:
         Fastp(
             readsRaw
+        )
+
+        FastpMultiQC(
+            'fastp',
+            Fastp.out.fastpJson.collect()
         )
 
     emit:
