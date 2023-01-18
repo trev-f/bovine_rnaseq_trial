@@ -1,5 +1,5 @@
 include { StarGenerateGenomeIndexes          } from "${projectDir}/modules/StarGenerateGenomeIndexes.nf"
-//include { StarRunMapping                     } from "${projectDir}/modules/StarRunMapping.nf"
+include { StarRunMapping                     } from "${projectDir}/modules/StarRunMapping.nf"
 //include { MultiQCIntermediate as StarMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
 workflow StarSWF {
@@ -28,12 +28,10 @@ workflow StarSWF {
             Run mapping job
         ---------------------------------------------------------------------
         */
-        /*
         StarRunMapping(
-            assembly,
             ch_starIndex,
             reads
         )
         ch_mappedBAMs = StarRunMapping.out.bam
-        */
+        ch_logFinalOut = StarRunMapping.out.logFinalOut
 }

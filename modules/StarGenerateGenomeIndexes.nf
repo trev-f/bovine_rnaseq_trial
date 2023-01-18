@@ -12,7 +12,7 @@ process StarGenerateGenomeIndexes {
         path annotationsGTF
     
     output:
-        path 'star_index/*', emit: index
+        path 'star_index', emit: index
     
     script:
         """
