@@ -86,6 +86,7 @@ workflow {
         ch_readsTrimmed,
         params.readsSampleSize
     )
+    ch_sampledReads = SeqtkSample.out.sampledReads
 
 
     /*
@@ -97,7 +98,7 @@ workflow {
         params.assembly,
         file(params.genome),
         file(params.annotationsGTF),
-        ch_readsTrimmed
+        ch_sampledReads
     )
     ch_starLogs = Star.out.logFinalOut
 
