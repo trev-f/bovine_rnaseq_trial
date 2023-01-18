@@ -5,6 +5,7 @@ include { TrimReadsSWF   as TrimReads   } from "${projectDir}/subworkflows/TrimR
 include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
 include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/SalmonSWF.nf"
 include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
+include { StarSWF        as Star        } from "${projectDir}/subworkflows/StarSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -86,6 +87,21 @@ workflow {
         params.readsSampleSize
     )
 
+
+    /*
+    ---------------------------------------------------------------------
+        Salmon
+    ---------------------------------------------------------------------
+    */
+    Star(
+        params.assembly,
+        file(params.genome),
+        file(params.annotationsGTF),
+        ch_readsTrimmed
+    )
+    ch_starLogs = Star.out.logFinalOut
+
+
     /*
     ---------------------------------------------------------------------
         Full pipeline MultiQC
@@ -97,6 +113,7 @@ workflow {
         .concat(ch_readsRawFQC)
         .concat(ch_readsTrimmedFQC)
         .concat(ch_salmonQuant)
+        .concat(ch_starLogs)
 
     FullMultiQC(
         ch_fullMultiQC.collect()
