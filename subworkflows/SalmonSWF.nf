@@ -2,6 +2,7 @@ include { SalmonExtractDecoys                  } from "${projectDir}/modules/Sal
 include { SalmonConcatenateTranscriptomeGenome } from "${projectDir}/modules/SalmonConcatenateTranscriptomeGenome.nf"
 include { SalmonIndex                          } from "${projectDir}/modules/SalmonIndex.nf"
 include { SalmonQuantMappingMode               } from "${projectDir}/modules/SalmonQuantMappingMode.nf"
+include { MultiQCIntermediate as SalmonMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
 workflow SalmonSWF {
     take:
@@ -53,7 +54,17 @@ workflow SalmonSWF {
             reads
         )
         ch_salmonQuant = SalmonQuantMappingMode.out.transcriptsQuant
-    
+
+
+        /*
+        ---------------------------------------------------------------------
+            Make QC report
+        ---------------------------------------------------------------------
+        */
+        SalmonMultiQC(
+            'salmon',
+            ch_salmonQuant.collect()
+        )
     emit:
         salmonQuant = ch_salmonQuant
 }
