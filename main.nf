@@ -4,6 +4,7 @@ include { ParseDesignSWF as ParseDesign } from "${projectDir}/subworkflows/Parse
 include { TrimReadsSWF   as TrimReads   } from "${projectDir}/subworkflows/TrimReadsSWF.nf"
 include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
 include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/SalmonSWF.nf"
+include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -72,6 +73,18 @@ workflow {
         ch_readsTrimmed
     )
     ch_salmonQuant = Salmon.out.salmonQuant
+
+
+    /*
+    ---------------------------------------------------------------------
+        Sample reads
+    ---------------------------------------------------------------------
+    */
+
+    SeqtkSample(
+        ch_readsTrimmed,
+        params.readsSampleSize
+    )
 
     /*
     ---------------------------------------------------------------------
