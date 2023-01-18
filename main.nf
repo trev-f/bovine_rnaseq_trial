@@ -99,7 +99,7 @@ workflow {
         file(params.annotationsGTF),
         ch_readsTrimmed
     )
-    //ch_starBAMs = Star.out.ch_mappedBAMs
+    ch_starLogs = Star.out.logFinalOut
 
 
     /*
@@ -113,6 +113,7 @@ workflow {
         .concat(ch_readsRawFQC)
         .concat(ch_readsTrimmedFQC)
         .concat(ch_salmonQuant)
+        .concat(ch_starLogs)
 
     FullMultiQC(
         ch_fullMultiQC.collect()

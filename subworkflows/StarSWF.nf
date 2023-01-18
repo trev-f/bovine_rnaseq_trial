@@ -45,4 +45,7 @@ workflow StarSWF {
             'star',
             ch_logFinalOut.collect()
         )
+    
+    emit:
+        logFinalOut = ch_logFinalOut
 }
