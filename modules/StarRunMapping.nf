@@ -1,4 +1,6 @@
 process StarRunMapping {
+    tag "${metadata.sampleName}"
+    
     container 'quay.io/biocontainers/star:2.7.10a--h9ee0642_0'
 
     label 'cpu_high'
