@@ -52,10 +52,8 @@ workflow SalmonSWF {
             params.salmonLibType,
             reads
         )
-        ch_salmonMeta = SalmonQuantMappingMode.out.salmonMeta
-        ch_salmonFLD = SalmonQuantMappingMode.out.salmonFLD
+        ch_salmonQuant = SalmonQuantMappingMode.out.transcriptsQuant
     
     emit:
-        salmonMeta = ch_salmonMeta
-        salmonFLD = ch_salmonFLD
+        salmonQuant = ch_salmonQuant
 }

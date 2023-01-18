@@ -16,8 +16,6 @@ process SalmonQuantMappingMode {
 
     output:
         path '*', emit: transcriptsQuant
-        path '*meta_info.json', emit: salmonMeta
-        path '*flenDist.txt', emit: salmonFLD
 
     script:
         // auto detect library type if it is not already specified
