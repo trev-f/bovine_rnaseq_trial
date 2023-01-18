@@ -68,8 +68,10 @@ workflow {
     Salmon(
         params.assembly,
         file(params.transcriptome),
-        file(params.genome)
+        file(params.genome),
+        ch_readsTrimmed
     )
+    ch_salmonQuant = Salmon.out.salmonQuant
 
     /*
     ---------------------------------------------------------------------
@@ -81,6 +83,7 @@ workflow {
         .concat(ch_fastpJson)
         .concat(ch_readsRawFQC)
         .concat(ch_readsTrimmedFQC)
+        .concat(ch_salmonQuant)
 
     FullMultiQC(
         ch_fullMultiQC.collect()
