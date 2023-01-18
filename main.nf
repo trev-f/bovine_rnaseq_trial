@@ -5,6 +5,7 @@ include { TrimReadsSWF   as TrimReads   } from "${projectDir}/subworkflows/TrimR
 include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
 include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/SalmonSWF.nf"
 include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
+include { StarSWF        as Star        } from "${projectDir}/subworkflows/StarSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -85,6 +86,21 @@ workflow {
         ch_readsTrimmed,
         params.readsSampleSize
     )
+
+
+    /*
+    ---------------------------------------------------------------------
+        Salmon
+    ---------------------------------------------------------------------
+    */
+    Star(
+        params.assembly,
+        file(params.genome),
+        file(params.annotationsGTF),
+        ch_readsTrimmed
+    )
+    //ch_starBAMs = Star.out.ch_mappedBAMs
+
 
     /*
     ---------------------------------------------------------------------
