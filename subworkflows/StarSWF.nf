@@ -1,6 +1,6 @@
 include { StarGenerateGenomeIndexes          } from "${projectDir}/modules/StarGenerateGenomeIndexes.nf"
 include { StarRunMapping                     } from "${projectDir}/modules/StarRunMapping.nf"
-//include { MultiQCIntermediate as StarMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
+include { MultiQCIntermediate as StarMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
 workflow StarSWF {
     take:
@@ -34,4 +34,15 @@ workflow StarSWF {
         )
         ch_mappedBAMs = StarRunMapping.out.bam
         ch_logFinalOut = StarRunMapping.out.logFinalOut
+
+
+        /*
+        ---------------------------------------------------------------------
+            Make QC report
+        ---------------------------------------------------------------------
+        */
+        StarMultiQC(
+            'star',
+            ch_logFinalOut.collect()
+        )
 }
