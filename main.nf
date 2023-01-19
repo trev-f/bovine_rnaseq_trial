@@ -6,6 +6,8 @@ include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/Reads
 include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/SalmonSWF.nf"
 include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
 include { StarSWF        as Star        } from "${projectDir}/subworkflows/StarSWF.nf"
+include { SamtoolsSortIndex             } from "${projectDir}/modules/SamtoolsSortIndex.nf"
+include {RSeQCSWF        as RSeQC       } from "${projectDir}/subworkflows/RSeQCSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -84,6 +86,7 @@ workflow {
 
     SeqtkSample(
         ch_readsTrimmed,
+    
         params.readsSampleSize
     )
     ch_sampledReads = SeqtkSample.out.sampledReads
@@ -91,7 +94,7 @@ workflow {
 
     /*
     ---------------------------------------------------------------------
-        Salmon
+        Star
     ---------------------------------------------------------------------
     */
     Star(
@@ -101,20 +104,44 @@ workflow {
         ch_sampledReads
     )
     ch_starLogs = Star.out.logFinalOut
+    ch_bams     = Star.out.bams
 
+
+    /*
+    ---------------------------------------------------------------------
+        Sort and index bams
+    ---------------------------------------------------------------------
+    */
+    SamtoolsSortIndex(
+        ch_bams
+    )
+    ch_indexedBams = SamtoolsSortIndex.out.bamIndexed
+
+
+    /*
+    ---------------------------------------------------------------------
+        Sort and index bams
+    ---------------------------------------------------------------------
+    */
+    RSeQC(
+        params.assembly,
+        params.annotationsGTF,
+        ch_indexedBams
+    )
+    ch_rseqcMultiQC = RSeQC.out.rseqcMultiQC
 
     /*
     ---------------------------------------------------------------------
         Full pipeline MultiQC
     ---------------------------------------------------------------------
     */
-
     ch_fullMultiQC = Channel.empty()
         .concat(ch_fastpJson)
         .concat(ch_readsRawFQC)
         .concat(ch_readsTrimmedFQC)
         .concat(ch_salmonQuant)
         .concat(ch_starLogs)
+        .concat(ch_rseqcMultiQC)
 
     FullMultiQC(
         ch_fullMultiQC.collect()
