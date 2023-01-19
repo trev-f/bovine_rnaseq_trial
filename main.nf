@@ -128,19 +128,20 @@ workflow {
         params.annotationsGTF,
         ch_indexedBams
     )
+    ch_rseqcMultiQC = RSeQC.out.rseqcMultiQC
 
     /*
     ---------------------------------------------------------------------
         Full pipeline MultiQC
     ---------------------------------------------------------------------
     */
-
     ch_fullMultiQC = Channel.empty()
         .concat(ch_fastpJson)
         .concat(ch_readsRawFQC)
         .concat(ch_readsTrimmedFQC)
         .concat(ch_salmonQuant)
         .concat(ch_starLogs)
+        .concat(ch_rseqcMultiQC)
 
     FullMultiQC(
         ch_fullMultiQC.collect()

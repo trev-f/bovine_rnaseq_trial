@@ -59,4 +59,7 @@ workflow RSeQCSWF {
             'rseqc',
             ch_rseqcMultiQC.collect()
         )
+
+    emit:
+        rseqcMultiQC = ch_rseqcMultiQC
 }
