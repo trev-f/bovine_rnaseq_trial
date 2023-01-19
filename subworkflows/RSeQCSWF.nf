@@ -1,5 +1,6 @@
 include { GTF2Bed } from "${projectDir}/modules/GTF2Bed.nf"
 include { RSeQCGeneBodyCoverage } from "${projectDir}/modules/RSeQCGeneBodyCoverage.nf"
+include { RSeQCReadDistribution } from "${projectDir}/modules/RSeQCReadDistribution.nf"
 include { MultiQCIntermediate as RSeQCMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
 workflow RSeQCSWF {
@@ -31,6 +32,17 @@ workflow RSeQCSWF {
             ch_annotationsBed12
         )
         ch_geneBodyCoverage = RSeQCGeneBodyCoverage.out.geneBodyCoverage
+
+
+        /*
+        ---------------------------------------------------------------------
+            Calculate distribution of reads over genome features
+        ---------------------------------------------------------------------
+        */
+        RSeQCReadDistribution(
+            indexedBams,
+            ch_annotationsBed12
+        )
 
 
         /*
