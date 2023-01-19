@@ -7,6 +7,7 @@ include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/Salmo
 include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
 include { StarSWF        as Star        } from "${projectDir}/subworkflows/StarSWF.nf"
 include { SamtoolsSortIndex             } from "${projectDir}/modules/SamtoolsSortIndex.nf"
+include {RSeQCSWF        as RSeQC       } from "${projectDir}/subworkflows/RSeQCSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -85,6 +86,7 @@ workflow {
 
     SeqtkSample(
         ch_readsTrimmed,
+    
         params.readsSampleSize
     )
     ch_sampledReads = SeqtkSample.out.sampledReads
@@ -114,6 +116,16 @@ workflow {
         ch_bams
     )
 
+
+    /*
+    ---------------------------------------------------------------------
+        Sort and index bams
+    ---------------------------------------------------------------------
+    */
+    RSeQC(
+        params.assembly,
+        params.annotationsGTF
+    )
 
     /*
     ---------------------------------------------------------------------
