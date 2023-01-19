@@ -115,6 +115,7 @@ workflow {
     SamtoolsSortIndex(
         ch_bams
     )
+    ch_indexedBams = SamtoolsSortIndex.out.bamIndexed
 
 
     /*
@@ -124,7 +125,8 @@ workflow {
     */
     RSeQC(
         params.assembly,
-        params.annotationsGTF
+        params.annotationsGTF,
+        ch_indexedBams
     )
 
     /*
