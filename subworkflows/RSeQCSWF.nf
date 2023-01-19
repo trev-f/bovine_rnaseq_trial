@@ -1,5 +1,6 @@
 include { GTF2Bed } from "${projectDir}/modules/GTF2Bed.nf"
 include { RSeQCGeneBodyCoverage } from "${projectDir}/modules/RSeQCGeneBodyCoverage.nf"
+include { MultiQCIntermediate as RSeQCMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
 workflow RSeQCSWF {
     take:
@@ -28,5 +29,20 @@ workflow RSeQCSWF {
         RSeQCGeneBodyCoverage(
             indexedBams,
             ch_annotationsBed12
+        )
+        ch_geneBodyCoverage = RSeQCGeneBodyCoverage.out.geneBodyCoverage
+
+
+        /*
+        ---------------------------------------------------------------------
+            Make QC report
+        ---------------------------------------------------------------------
+        */
+        ch_rseqcMultiQC = Channel.empty()
+            .concat(ch_geneBodyCoverage)
+        
+        RSeQCMultiQC(
+            'rseqc',
+            ch_rseqcMultiQC.collect()
         )
 }
