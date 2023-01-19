@@ -6,6 +6,7 @@ include { ReadsQCSWF     as ReadsQC     } from "${projectDir}/subworkflows/Reads
 include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/SalmonSWF.nf"
 include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
 include { StarSWF        as Star        } from "${projectDir}/subworkflows/StarSWF.nf"
+include { SamtoolsSortIndex             } from "${projectDir}/modules/SamtoolsSortIndex.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -91,7 +92,7 @@ workflow {
 
     /*
     ---------------------------------------------------------------------
-        Salmon
+        Star
     ---------------------------------------------------------------------
     */
     Star(
@@ -101,6 +102,17 @@ workflow {
         ch_sampledReads
     )
     ch_starLogs = Star.out.logFinalOut
+    ch_bams     = Star.out.bams
+
+
+    /*
+    ---------------------------------------------------------------------
+        Sort and index bams
+    ---------------------------------------------------------------------
+    */
+    SamtoolsSortIndex(
+        ch_bams
+    )
 
 
     /*

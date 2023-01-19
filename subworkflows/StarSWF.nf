@@ -48,4 +48,5 @@ workflow StarSWF {
     
     emit:
         logFinalOut = ch_logFinalOut
+        bams        = ch_mappedBAMs
 }

@@ -14,7 +14,7 @@ process StarRunMapping {
         tuple val(metadata), file(reads)
 
     output:
-        path '*.bam', emit: bam
+        tuple val(metadata), path('*.bam'), emit: bam
         path '*Log.final.out', emit: logFinalOut
     
     script:
