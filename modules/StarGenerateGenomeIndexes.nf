@@ -4,7 +4,8 @@ process StarGenerateGenomeIndexes {
     container 'quay.io/biocontainers/star:2.7.10a--h9ee0642_0'
 
     label 'cpu_high'
-    label 'mem_high'
+    label 'mem_huge'
+    label 'time_mid'
 
     storeDir "${params.baseDirData}/references/${assembly}"
 
