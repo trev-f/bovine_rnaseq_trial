@@ -43,6 +43,7 @@ workflow RSeQCSWF {
             indexedBams,
             ch_annotationsBed12
         )
+        ch_readDistribution = RSeQCReadDistribution.out.readDistribution
 
 
         /*
@@ -52,6 +53,7 @@ workflow RSeQCSWF {
         */
         ch_rseqcMultiQC = Channel.empty()
             .concat(ch_geneBodyCoverage)
+            .concat(ch_readDistribution)
         
         RSeQCMultiQC(
             'rseqc',
