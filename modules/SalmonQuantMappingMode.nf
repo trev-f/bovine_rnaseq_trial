@@ -1,7 +1,7 @@
 process SalmonQuantMappingMode {
     tag "${metadata.sampleName}"
 
-    container 'quay.io/biocontainers/salmon:1.9.0--h7e5ed60_1'
+    label 'salmon'
 
     label 'cpu_high'
     label 'mem_high'

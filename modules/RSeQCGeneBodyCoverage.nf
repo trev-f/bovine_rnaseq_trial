@@ -1,7 +1,7 @@
 process RSeQCGeneBodyCoverage {
     tag "${metadata.sampleName}"
 
-    container 'quay.io/biocontainers/rseqc:5.0.1--py38hbff2b2d_0'
+    label 'rseqc'
 
     publishDir "${params.baseDirData}/rseqc", mode: 'copy', pattern: '*.geneBodyCoverage.txt'
 

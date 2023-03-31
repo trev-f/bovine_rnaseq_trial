@@ -1,5 +1,5 @@
 process SalmonIndex {
-    container 'quay.io/biocontainers/salmon:1.9.0--h7e5ed60_1'
+    label 'salmon'
 
     label 'cpu_mid'
     label 'mem_high'

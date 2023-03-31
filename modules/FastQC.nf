@@ -1,9 +1,9 @@
 process FastQC {
     tag "${metadata.sampleName}"
 
-    label 'mem_low'
+    label 'fastqc'
 
-    container 'biocontainers/fastqc:v0.11.9_cv8'
+    label 'mem_low'
 
     input:
         tuple val(metadata), file(reads)

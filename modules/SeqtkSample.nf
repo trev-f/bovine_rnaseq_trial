@@ -1,7 +1,7 @@
 process SeqtkSample {
     tag "${metadata.sampleName}"
 
-    container 'quay.io/biocontainers/seqtk:1.3--h7132678_4'
+    label 'seqtk'
 
     publishDir "${params.baseDirData}/reads/trimmed/sampled", mode: 'copy', pattern: '*.fastq.gz'
 

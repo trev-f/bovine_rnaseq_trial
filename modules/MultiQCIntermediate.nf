@@ -1,10 +1,10 @@
 process MultiQCIntermediate {
     tag "${reportLabel}_MultiQC"
 
+    label 'multiqc'
+
     label 'mem_mid'
     label 'time_low'
-
-    container 'ewels/multiqc:v1.11'
 
     publishDir "${params.baseDirReports}/multiqc/${reportLabel}", mode: 'copy', pattern: '*.html'
     publishDir "${params.baseDirData}/multiqc/${reportLabel}",   mode: 'copy', pattern: '*multiqc_data*'

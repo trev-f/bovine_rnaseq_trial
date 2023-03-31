@@ -1,7 +1,7 @@
 process GTF2GFF {
     tag "${assembly}"
 
-    container 'quay.io/biocontainers/agat:1.0.0--pl5321hdfd78af_0'
+    label 'agat'
 
     storeDir "${params.baseDirData}/references/${assembly}"
 

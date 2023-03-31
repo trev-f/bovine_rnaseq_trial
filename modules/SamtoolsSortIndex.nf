@@ -1,10 +1,10 @@
 process SamtoolsSortIndex {
     tag "${metadata.sampleName}"
 
+    label 'samtools'
+
     label 'cpu_mid'
     label 'mem_mid'
-
-    container 'quay.io/biocontainers/samtools:1.15--h1170115_1'
 
     publishDir "${params.baseDirData}/map", mode: 'copy', pattern: '*'
 

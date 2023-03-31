@@ -1,10 +1,10 @@
 process Fastp {
     tag "${metadata.sampleName}"
 
+    label 'fastp'
+
     label 'cpu_mid'
     label 'mem_mid'
-
-    container 'quay.io/biocontainers/fastp:0.23.2--h79da9fb_0'
     
     publishDir "${params.baseDirData}/reads/trimmed", mode: 'copy', pattern: '*.fastq.gz'
 
