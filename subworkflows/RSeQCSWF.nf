@@ -1,4 +1,5 @@
-include { GTF2Bed } from "${projectDir}/modules/GTF2Bed.nf"
+include { GTF2GFF } from "${projectDir}/modules/GTF2GFF.nf"
+include { GFF2Bed } from "${projectDir}/modules/GFF2Bed.nf"
 include { RSeQCGeneBodyCoverage } from "${projectDir}/modules/RSeQCGeneBodyCoverage.nf"
 include { RSeQCReadDistribution } from "${projectDir}/modules/RSeQCReadDistribution.nf"
 include { MultiQCIntermediate as RSeQCMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
@@ -15,11 +16,17 @@ workflow RSeQCSWF {
             Convert annotations from GTF to Bed12
         ---------------------------------------------------------------------
         */
-        GTF2Bed(
+        GTF2GFF(
             assembly,
             annotationsGTF
         )
-        ch_annotationsBed12 = GTF2Bed.out.bed12
+        ch_annotationsGFF = GTF2GFF.out.gff
+
+        GFF2Bed(
+            assembly,
+            annotationsGTF
+        )
+        ch_annotationsBed12 = GFF2Bed.out.bed12
 
 
         /*
