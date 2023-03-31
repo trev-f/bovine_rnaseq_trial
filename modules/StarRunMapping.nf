@@ -18,10 +18,13 @@ process StarRunMapping {
         path '*Log.final.out', emit: logFinalOut
     
     script:
+        // set reads argument based on whether sample is single- or paired-end reads
+        readsArg = reads[1] ? "${reads[0]} ${reads[1]}" : "${reads[0]}"
+        
         """
         STAR \
             --genomeDir ${genomeIndex} \
-            --readFilesIn ${reads[0]} ${reads[1]} \
+            --readFilesIn ${readsArg} \
             --readFilesCommand gunzip -c \
             --outFileNamePrefix ${metadata.sampleName} \
             --runThreadN ${task.cpus} \
