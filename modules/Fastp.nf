@@ -16,13 +16,24 @@ process Fastp {
         path ('*fastp.json'), emit: fastpJson
     
     script:
-        """
-        fastp \
-            --thread ${task.cpus} \
-            -i ${reads[0]} \
-            -I ${reads[1]} \
-            -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
-            -O ${metadata.sampleName}_trimmed_R2.fastq.gz \
-            -j ${metadata.sampleName}_fastp.json
-        """
+        if (reads[1]) {
+            """
+            fastp \
+                --thread ${task.cpus} \
+                -i ${reads[0]} \
+                -I ${reads[1]} \
+                -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
+                -O ${metadata.sampleName}_trimmed_R2.fastq.gz \
+                -j ${metadata.sampleName}_fastp.json
+            """
+        }
+        else {
+            """
+            fastp \
+                --thread ${task.cpus} \
+                -i ${reads[0]} \
+                -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
+                -j ${metadata.sampleName}_fastp.json
+            """
+        }
 }
