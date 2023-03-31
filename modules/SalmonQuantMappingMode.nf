@@ -21,12 +21,22 @@ process SalmonQuantMappingMode {
         // auto detect library type if it is not already specified
         libType = libType ?: 'A'
 
+        // set reads argument based on whether sample is single- or paired-end reads
+        if (reads[1]) {
+            log.debug "${metadata.sampleName} is paired-end reads"
+            readsArg = "--mates1 ${reads[0]} --mates2 ${reads[1]}"
+        } else {
+            log.debug "${metadata.sampleName} is single-end reads"
+            readsArg = "--unmatedReads ${reads[0]}"
+        }
+        log.debug "Reads argument for ${metadata.sampleName}: ${readsArg}"
+        
+
         """
         salmon quant \
             --libType ${libType} \
             --index ${salmonIndex} \
-            --mates1 ${reads[0]} \
-            --mates2 ${reads[1]} \
+            ${readsArg} \
             --output ${metadata.sampleName}_transcripts_quant \
             --threads ${task.cpus} \
             --validateMappings \
