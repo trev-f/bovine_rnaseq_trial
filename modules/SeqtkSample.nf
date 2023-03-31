@@ -16,21 +16,34 @@ process SeqtkSample {
         // set variable values
         seed = 100
 
-        """
-        # sample R1
-        seqtk sample \
-            -s${seed} \
-            ${reads[0]} \
-            ${sampleSize} \
-        | gzip -c \
-        > ${metadata.sampleName}_trimmed_sampled-${sampleSize}_R1.fastq.gz
+        if (reads[1]) {
+            """
+            # sample R1
+            seqtk sample \
+                -s${seed} \
+                ${reads[0]} \
+                ${sampleSize} \
+            | gzip -c \
+            > ${metadata.sampleName}_trimmed_sampled-${sampleSize}_R1.fastq.gz
 
-        # sample R2
-        seqtk sample \
-            -s${seed} \
-            ${reads[1]} \
-            ${sampleSize} \
-        | gzip -c \
-        > ${metadata.sampleName}_trimmed_sampled-${sampleSize}_R2.fastq.gz
-        """
+            # sample R2
+            seqtk sample \
+                -s${seed} \
+                ${reads[1]} \
+                ${sampleSize} \
+            | gzip -c \
+            > ${metadata.sampleName}_trimmed_sampled-${sampleSize}_R2.fastq.gz
+            """
+        } else {
+            """
+            # sample R1
+            seqtk sample \
+                -s${seed} \
+                ${reads[0]} \
+                ${sampleSize} \
+            | gzip -c \
+            > ${metadata.sampleName}_trimmed_sampled-${sampleSize}_R1.fastq.gz
+            """
+        }
+        
 }
