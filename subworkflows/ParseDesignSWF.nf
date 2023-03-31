@@ -9,8 +9,6 @@ workflow ParseDesignSWF {
             .map { createInputChannel(it) }
             .set { samples }
         
-        samples.view()
-    
     emit:
         samples = samples
 }
