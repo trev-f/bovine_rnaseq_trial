@@ -8,6 +8,8 @@ workflow ParseDesignSWF {
             .splitCsv( header: true )
             .map { createInputChannel(it) }
             .set { samples }
+        
+        samples.view()
     
     emit:
         samples = samples
@@ -21,7 +23,7 @@ def createInputChannel(LinkedHashMap row) {
     metadata.sampleName = row.sampleName
 
     // store reads in a list
-    def reads = [file(row.reads1, checkIfExists: true), file(row.reads2, checkIfExists: true)]
+    def reads = row.reads2 ? [file(row.reads1, checkIfExists: true), file(row.reads2, checkIfExists: true)] : [file(row.reads1, checkIfExists: true)]
 
     return [metadata, reads]
 }
