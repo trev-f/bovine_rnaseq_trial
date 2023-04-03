@@ -8,6 +8,7 @@ workflow StarSWF {
         genome
         annotationsGTF
         reads
+        runName
     
     main:
         /*
@@ -41,8 +42,11 @@ workflow StarSWF {
             Make QC report
         ---------------------------------------------------------------------
         */
+        toolLabel = "star"
+        reportLabel = "${runName}_${toolLabel}"
         StarMultiQC(
-            'star',
+            reportLabel,
+            toolLabel,
             ch_logFinalOut.collect()
         )
     

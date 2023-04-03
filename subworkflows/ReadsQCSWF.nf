@@ -8,6 +8,7 @@ workflow ReadsQCSWF {
     take:
         readsRaw
         readsTrimmed
+        runName
     
     main:
         // run FastQC on raw reads
@@ -21,8 +22,11 @@ workflow ReadsQCSWF {
         }
 
         // summarize raw FastQC in a MultiQC report
+        toolLabel = 'fastqc_raw'
+        reportLabel = "${runName}_${toolLabel}"
         RawFastQCMultiQC(
-            'raw_fastqc',
+            reportLabel,
+            toolLabel,
             ch_rawFastQCZip.collect()
         )
 
@@ -38,8 +42,11 @@ workflow ReadsQCSWF {
         }
 
         // summarize trimmed FastQC in a MultiQC report
+        toolLabel = 'fastqc_trimmed'
+        reportLabel = "${runName}_${toolLabel}"
         TrimmedFastQCMultiQC(
-            'trimmed_fastqc',
+            reportLabel,
+            toolLabel,
             ch_trimFastQCZip.collect()
         )
 

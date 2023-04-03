@@ -9,6 +9,7 @@ workflow RSeQCSWF {
         assembly
         annotationsGTF
         indexedBams
+        runName
 
     main:
         /*
@@ -62,8 +63,11 @@ workflow RSeQCSWF {
             .concat(ch_geneBodyCoverage)
             .concat(ch_readDistribution)
         
+        toolLabel = "rseqc"
+        reportLabel = "${runName}_${toolLabel}"
         RSeQCMultiQC(
-            'rseqc',
+            reportLabel,
+            toolLabel,
             ch_rseqcMultiQC.collect()
         )
 

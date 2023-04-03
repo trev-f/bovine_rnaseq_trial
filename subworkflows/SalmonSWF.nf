@@ -10,6 +10,7 @@ workflow SalmonSWF {
         transcriptome
         genome
         reads
+        runName
     
     main:
         /*
@@ -61,8 +62,11 @@ workflow SalmonSWF {
             Make QC report
         ---------------------------------------------------------------------
         */
+        toolLabel = "salmon"
+        reportLabel = "${runName}_${toolLabel}"
         SalmonMultiQC(
-            'salmon',
+            reportLabel,
+            toolLabel,
             ch_salmonQuant.collect()
         )
     emit:

@@ -4,14 +4,18 @@ include { MultiQCIntermediate as FastpMultiQC } from "${projectDir}/modules/Mult
 workflow TrimReadsSWF {
     take:
         readsRaw
+        runName
 
     main:
         Fastp(
             readsRaw
         )
 
+        toolLabel = "fastp"
+        reportLabel = "${runName}_${toolLabel}"
         FastpMultiQC(
-            'fastp',
+            reportLabel,
+            toolLabel,
             Fastp.out.fastpJson.collect()
         )
 

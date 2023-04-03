@@ -35,7 +35,8 @@ workflow {
     if (!params.skipTrimReads) {
         // Subworkflow: Trim raw reads
         TrimReads(
-            ch_readsRaw
+            ch_readsRaw,
+            runName
         )
         ch_readsTrimmed = TrimReads.out.readsTrimmed
         ch_fastpJson    = TrimReads.out.fastpJson
@@ -55,7 +56,8 @@ workflow {
         // Subworkflow: FastQC for raw reads
         ReadsQC(
             ch_readsRaw,
-            ch_readsTrimmed
+            ch_readsTrimmed,
+            runName
         )
         ch_readsRawFQC     = ReadsQC.out.raw_fqc_zip
         ch_readsTrimmedFQC = ReadsQC.out.trim_fqc_zip
@@ -75,7 +77,8 @@ workflow {
         params.assembly,
         file(params.transcriptome),
         file(params.genome),
-        ch_readsTrimmed
+        ch_readsTrimmed,
+        runName
     )
     ch_salmonQuant = Salmon.out.salmonQuant
 
@@ -103,7 +106,8 @@ workflow {
         params.assembly,
         file(params.genome),
         file(params.annotationsGTF),
-        ch_sampledReads
+        ch_sampledReads,
+        runName
     )
     ch_starLogs = Star.out.logFinalOut
     ch_bams     = Star.out.bams
@@ -128,7 +132,8 @@ workflow {
     RSeQC(
         params.assembly,
         params.annotationsGTF,
-        ch_indexedBams
+        ch_indexedBams,
+        runName
     )
     ch_rseqcMultiQC = RSeQC.out.rseqcMultiQC
 
