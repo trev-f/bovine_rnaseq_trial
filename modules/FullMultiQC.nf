@@ -11,6 +11,7 @@ process FullMultiQC {
     publishDir "${params.baseDirData}/multiqc/full",   mode: 'copy', pattern: '*multiqc_data*'
 
     input:
+        val reportLabel
         path multiqcFiles
 
     output:
@@ -18,6 +19,8 @@ process FullMultiQC {
     
     script:
         """
-        multiqc ${multiqcFiles}
+        multiqc \
+            -n ${reportLabel}_multiqc_report \
+            ${multiqcFiles}
         """
 }

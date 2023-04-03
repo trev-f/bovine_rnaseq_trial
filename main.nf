@@ -11,6 +11,8 @@ include {RSeQCSWF        as RSeQC       } from "${projectDir}/subworkflows/RSeQC
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
+runName = params.runName ? "${params.runName}_${workflow.runName}" : "${workflow.runName}"
+
 workflow {
     /*
     ---------------------------------------------------------------------
@@ -143,7 +145,9 @@ workflow {
         .concat(ch_starLogs)
         .concat(ch_rseqcMultiQC)
 
+    reportLabel = "${runName}"
     FullMultiQC(
+        reportLabel,
         ch_fullMultiQC.collect()
     )
 }
