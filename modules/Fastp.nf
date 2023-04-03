@@ -16,6 +16,8 @@ process Fastp {
         path ('*fastp.json'), emit: fastpJson
     
     script:
+        def args = task.ext.args ?: ''
+
         if (reads[1]) {
             """
             fastp \
@@ -24,7 +26,8 @@ process Fastp {
                 -I ${reads[1]} \
                 -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
                 -O ${metadata.sampleName}_trimmed_R2.fastq.gz \
-                -j ${metadata.sampleName}_fastp.json
+                -j ${metadata.sampleName}_fastp.json \\
+                ${args}
             """
         }
         else {
@@ -33,7 +36,8 @@ process Fastp {
                 --thread ${task.cpus} \
                 -i ${reads[0]} \
                 -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
-                -j ${metadata.sampleName}_fastp.json
+                -j ${metadata.sampleName}_fastp.json \\
+                ${args}
             """
         }
 }
