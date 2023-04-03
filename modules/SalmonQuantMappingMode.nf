@@ -42,7 +42,6 @@ process SalmonQuantMappingMode {
             --output ${metadata.sampleName}_transcripts_quant \
             --threads ${task.cpus} \
             --validateMappings \
-            --writeMappings=${metadata.sampleName}_transcripts_mappings.txt \
             --writeUnmappedNames \
             ${args}
         """
