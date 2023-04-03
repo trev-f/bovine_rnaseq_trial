@@ -21,6 +21,8 @@ process SalmonQuantMappingMode {
         // auto detect library type if it is not already specified
         libType = libType ?: 'A'
 
+        def args = task.ext.args ?: ''
+
         // set reads argument based on whether sample is single- or paired-end reads
         if (reads[1]) {
             log.debug "${metadata.sampleName} is paired-end reads"
@@ -41,6 +43,7 @@ process SalmonQuantMappingMode {
             --threads ${task.cpus} \
             --validateMappings \
             --writeMappings=${metadata.sampleName}_transcripts_mappings.txt \
-            --writeUnmappedNames
+            --writeUnmappedNames \
+            ${args}
         """
 }
