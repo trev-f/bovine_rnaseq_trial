@@ -7,7 +7,7 @@ include { SalmonSWF      as Salmon      } from "${projectDir}/subworkflows/Salmo
 include { SeqtkSample                   } from "${projectDir}/modules/SeqtkSample.nf"
 include { StarSWF        as Star        } from "${projectDir}/subworkflows/StarSWF.nf"
 include { SamtoolsSortIndex             } from "${projectDir}/modules/SamtoolsSortIndex.nf"
-include {RSeQCSWF        as RSeQC       } from "${projectDir}/subworkflows/RSeQCSWF.nf"
+include { RSeQCSWF        as RSeQC      } from "${projectDir}/subworkflows/RSeQCSWF.nf"
 include { FullMultiQC                   } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -66,6 +66,17 @@ workflow {
         ch_readsTrimmedFQC = Channel.empty()
     }
 
+    // Set channel of reads to align 
+    if (!params.forceAlignRawReads) {
+        if (!params.skipTrimReads) {
+            ch_readsToAlign = ch_readsTrimmed
+        } else {
+            ch_readsToAlign = ch_readsRaw
+        }
+    } else {
+        ch_readsToAlign = ch_readsRaw
+    }
+
 
     /*
     ---------------------------------------------------------------------
@@ -77,7 +88,7 @@ workflow {
         params.assembly,
         file(params.transcriptome),
         file(params.genome),
-        ch_readsTrimmed,
+        ch_readsToAlign,
         runName
     )
     ch_salmonQuant = Salmon.out.salmonQuant
@@ -90,7 +101,7 @@ workflow {
     */
 
     SeqtkSample(
-        ch_readsTrimmed,
+        ch_readsToAlign,
     
         params.readsSampleSize
     )
@@ -106,7 +117,7 @@ workflow {
         params.assembly,
         file(params.genome),
         file(params.annotationsGTF),
-        ch_sampledReads,
+        ch_readsToAlign,
         runName
     )
     ch_starLogs = Star.out.logFinalOut
