@@ -4,7 +4,7 @@ process SalmonQuantMappingMode {
     label 'salmon'
 
     label 'cpu_high'
-    label 'mem_high'
+    label 'mem_big'
     label 'time_mid'
 
     publishDir "${params.baseDirData}/salmon_transcripts_quant", mode: 'copy', pattern: '*'
