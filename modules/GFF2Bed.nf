@@ -3,6 +3,8 @@ process GFF2Bed {
 
     label 'agat'
 
+    label 'mem_high'
+
     storeDir "${params.baseDirData}/references/${assembly}"
 
     input:
