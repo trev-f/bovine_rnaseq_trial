@@ -4,7 +4,7 @@ process StarRunMapping {
     label 'star'
 
     label 'cpu_high'
-    label 'mem_high'
+    label 'mem_big'
 
     publishDir "${params.baseDirData}/map/star", mode: 'copy', pattern: '*.bam'
     publishDir "${params.baseDirData}/map/star/logs", mode: 'copy', pattern: '*Log*'
