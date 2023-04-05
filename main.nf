@@ -36,6 +36,7 @@ workflow {
         // Subworkflow: Trim raw reads
         TrimReads(
             ch_readsRaw,
+            file(params.adapterFasta),
             runName
         )
         ch_readsTrimmed = TrimReads.out.readsTrimmed

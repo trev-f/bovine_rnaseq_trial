@@ -10,6 +10,7 @@ process Fastp {
 
     input:
         tuple val(metadata), file(reads)
+        path adapterFasta
     
     output:
         tuple val(metadata), path('*.fastq.gz'), emit: readsTrimmed
@@ -26,7 +27,8 @@ process Fastp {
                 -I ${reads[1]} \
                 -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
                 -O ${metadata.sampleName}_trimmed_R2.fastq.gz \
-                -j ${metadata.sampleName}_fastp.json \\
+                -j ${metadata.sampleName}_fastp.json \
+                --adapter_fasta ${adapterFasta} \
                 ${args}
             """
         }
@@ -35,8 +37,9 @@ process Fastp {
             fastp \
                 --thread ${task.cpus} \
                 -i ${reads[0]} \
-                -o ${metadata.sampleName}_trimmed_R1.fastq.gz \
-                -j ${metadata.sampleName}_fastp.json \\
+                -o ${metadata.sampleName}_trimmed.fastq.gz \
+                -j ${metadata.sampleName}_fastp.json \
+                --adapter_fasta ${adapterFasta} \
                 ${args}
             """
         }

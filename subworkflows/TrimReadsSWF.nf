@@ -4,11 +4,13 @@ include { MultiQCIntermediate as FastpMultiQC } from "${projectDir}/modules/Mult
 workflow TrimReadsSWF {
     take:
         readsRaw
+        adapterFasta
         runName
 
     main:
         Fastp(
-            readsRaw
+            readsRaw,
+            adapterFasta
         )
 
         toolLabel = "fastp"
