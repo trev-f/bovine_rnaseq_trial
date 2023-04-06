@@ -119,7 +119,7 @@ workflow {
         params.assembly,
         file(params.genome),
         file(params.annotationsGTF),
-        ch_readsToAlign,
+        ch_sampledReads,
         runName
     )
     ch_starLogs = Star.out.logFinalOut
