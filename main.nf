@@ -101,13 +101,16 @@ workflow {
         Sample reads
     ---------------------------------------------------------------------
     */
-
-    SeqtkSample(
-        ch_readsToAlign,
+    if (!params.skipSampleReadsSTAR) {
+        SeqtkSample(
+            ch_readsToAlign,
+            params.readsSampleSize
+        )
+        ch_readsToAlignSTAR = SeqtkSample.out.sampledReads
+    } else {
+        ch_readsToAlignSTAR = ch_readsToAlign
+    }
     
-        params.readsSampleSize
-    )
-    ch_sampledReads = SeqtkSample.out.sampledReads
 
 
     /*
@@ -119,7 +122,7 @@ workflow {
         params.assembly,
         file(params.genome),
         file(params.annotationsGTF),
-        ch_sampledReads,
+        ch_readsToAlignSTAR,
         runName
     )
     ch_starLogs = Star.out.logFinalOut
