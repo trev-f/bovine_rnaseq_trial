@@ -85,15 +85,18 @@ workflow {
         Salmon
     ---------------------------------------------------------------------
     */
-
-    Salmon(
-        params.assembly,
-        file(params.transcriptome),
-        file(params.genome),
-        ch_readsToAlign,
-        runName
-    )
-    ch_salmonQuant = Salmon.out.salmonQuant
+    if (!params.skipSalmon) {
+        Salmon(
+            params.assembly,
+            file(params.transcriptome),
+            file(params.genome),
+            ch_readsToAlign,
+            runName
+        )
+        ch_salmonQuant = Salmon.out.salmonQuant
+    } else {
+        ch_salmonQuant = Channel.empty()
+    }
 
 
     /*
