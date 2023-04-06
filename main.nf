@@ -176,6 +176,7 @@ workflow {
         .concat(ch_salmonQuant)
         .concat(ch_starLogs)
         .concat(ch_rseqcMultiQC)
+        .concat(ch_countsSummary)
 
     reportLabel = "${runName}"
     FullMultiQC(
