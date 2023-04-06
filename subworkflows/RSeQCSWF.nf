@@ -72,5 +72,6 @@ workflow RSeQCSWF {
         )
 
     emit:
-        rseqcMultiQC = ch_rseqcMultiQC
+        rseqcMultiQC   = ch_rseqcMultiQC
+        annotationsGFF = ch_annotationsGFF
 }
