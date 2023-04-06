@@ -157,13 +157,19 @@ workflow {
         Count reads in genes
     ---------------------------------------------------------------------
     */
-    FeatureCounts(
-        ch_indexedBams,
-        ch_annotationsGFF,
-        runName
-    )
-    ch_counts        = FeatureCounts.out.counts
-    ch_countsSummary = FeatureCounts.out.countsSummary
+    if (!params.skipFeatureCounts) {
+        FeatureCounts(
+            ch_indexedBams,
+            ch_annotationsGFF,
+            runName
+        )
+        ch_counts        = FeatureCounts.out.counts
+        ch_countsSummary = FeatureCounts.out.countsSummary
+    } else {
+        ch_counts        = Channel.empty()
+        ch_countsSummary = Channel.empty()
+    }
+
 
     /*
     ---------------------------------------------------------------------
