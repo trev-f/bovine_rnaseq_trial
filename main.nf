@@ -121,15 +121,20 @@ workflow {
         Star
     ---------------------------------------------------------------------
     */
-    Star(
-        params.assembly,
-        file(params.genome),
-        file(params.annotationsGTF),
-        ch_readsToAlignSTAR,
-        runName
-    )
-    ch_starLogs = Star.out.logFinalOut
-    ch_bams     = Star.out.bams
+    if (!params.skipSTAR) {
+        Star(
+            params.assembly,
+            file(params.genome),
+            file(params.annotationsGTF),
+            ch_readsToAlignSTAR,
+            runName
+        )
+        ch_starLogs = Star.out.logFinalOut
+        ch_bams     = Star.out.bams
+    } else {
+        ch_starLogs = Channel.empty()
+        ch_bams     = Channel.empty()
+    }
 
 
     /*
