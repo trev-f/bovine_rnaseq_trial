@@ -159,7 +159,8 @@ workflow {
     */
     FeatureCounts(
         ch_indexedBams,
-        ch_annotationsGFF
+        ch_annotationsGFF,
+        runName
     )
     ch_counts        = FeatureCounts.out.counts
     ch_countsSummary = FeatureCounts.out.countsSummary
