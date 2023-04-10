@@ -3,6 +3,7 @@ nextflow.enable.dsl=2
 include { ParseDesignSWF   as ParseDesign } from "${projectDir}/subworkflows/ParseDesignSWF.nf"
 include { TrimReadsSWF     as TrimReads     } from "${projectDir}/subworkflows/TrimReadsSWF.nf"
 include { ReadsQCSWF       as ReadsQC       } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
+include { ConcatenateLanesSWF as ConcatenateLanes } from "./subworkflows/ConcatenateLanesSWF.nf"
 include { SalmonSWF        as Salmon        } from "${projectDir}/subworkflows/SalmonSWF.nf"
 include { SeqtkSample                       } from "${projectDir}/modules/SeqtkSample.nf"
 include { StarSWF          as Star          } from "${projectDir}/subworkflows/StarSWF.nf"
@@ -68,6 +69,12 @@ workflow {
         ch_readsTrimmedFQC = Channel.empty()
     }
 
+
+    /*
+    ---------------------------------------------------------------------
+        Process reads
+    ---------------------------------------------------------------------
+    */
     // Set channel of reads to align 
     if (!params.forceAlignRawReads) {
         if (!params.skipTrimReads) {
@@ -80,11 +87,19 @@ workflow {
     }
 
 
+    if (!params.skipConcatenateLanes) {
+        ConcatenateLanes(
+            ch_readsToAlign
+        )
+    }
+
+
     /*
     ---------------------------------------------------------------------
         Salmon
     ---------------------------------------------------------------------
     */
+    ch_readsToAlign.view()
     if (!params.skipSalmon) {
         Salmon(
             params.assembly,
