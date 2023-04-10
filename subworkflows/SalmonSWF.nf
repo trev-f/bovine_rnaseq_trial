@@ -1,6 +1,7 @@
 include { SalmonExtractDecoys                  } from "${projectDir}/modules/SalmonExtractDecoys.nf"
 include { SalmonConcatenateTranscriptomeGenome } from "${projectDir}/modules/SalmonConcatenateTranscriptomeGenome.nf"
 include { SalmonIndex                          } from "${projectDir}/modules/SalmonIndex.nf"
+include { cutSampleNameLaneNumber              } from "../functions/MergeLanes.nf"
 include { SalmonQuantMappingMode               } from "${projectDir}/modules/SalmonQuantMappingMode.nf"
 include { MultiQCIntermediate as SalmonMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
@@ -49,6 +50,11 @@ workflow SalmonSWF {
             Map and quantify reads
         ---------------------------------------------------------------------
         */
+        if (params.mergeLanes) {
+            reads
+                .map { cutSampleNameLaneNumber(it) }
+                .view()
+        }
         SalmonQuantMappingMode(
             ch_salmonIndex,
             params.salmonLibType,

@@ -1,4 +1,5 @@
 include { StarGenerateGenomeIndexes          } from "${projectDir}/modules/StarGenerateGenomeIndexes.nf"
+include { cutSampleNameLaneNumber            } from "../functions/MergeLanes.nf"
 include { StarRunMapping                     } from "${projectDir}/modules/StarRunMapping.nf"
 include { MultiQCIntermediate as StarMultiQC } from "${projectDir}/modules/MultiQCIntermediate.nf"
 
@@ -29,6 +30,11 @@ workflow StarSWF {
             Run mapping job
         ---------------------------------------------------------------------
         */
+        if (params.mergeLanes) {
+            reads
+                .map { cutSampleNameLaneNumber(it) }
+                .view()
+        }
         StarRunMapping(
             ch_starIndex,
             reads
