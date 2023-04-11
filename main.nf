@@ -83,23 +83,34 @@ workflow {
         Process reads
     ---------------------------------------------------------------------
     */
-    // Set channel of reads to align 
+    // Set channel of reads to process for downstream steps 
     if (params.forceAlignRawReads || params.skipTrimReads) {
-        ch_readsToAlign = ch_readsRaw
+        ch_readsToProcess = ch_readsRaw
     } else {
-        ch_readsToAlign = ch_readsTrimmed
+        ch_readsToProcess = ch_readsTrimmed
     }
-    ch_readsToAlign
-        .dump(tag: 'ch_readsToAlign', pretty: true)
+    ch_readsToProcess
+        .dump(tag: 'ch_readsToProcess', pretty: true)
 
 
-    /*
     if (!params.skipConcatenateLanes) {
         ConcatenateLanes(
-            ch_readsToAlign
+            ch_readsToProcess
         )
+        ch_readsToPseudoMap = ConcatenateLanes.out.catReads
+        ch_readsToSample    = ConcatenateLanes.out.catReads
+    } else {
+        ch_readsToPseudoMap = ch_readsToProcess
+        ch_readsToSample    = ch_readsToProcess
     }
-    */
+    ch_readsToPseudoMap.dump(
+        tag: 'ch_readsToPseudoMap',
+        pretty: true
+    )
+    ch_readsToSample.dump(
+        tag: 'ch_readsToSample',
+        pretty: true
+    )
 
 
     /*
@@ -112,7 +123,7 @@ workflow {
             params.assembly,
             file(params.transcriptome),
             file(params.genome),
-            ch_readsToAlign,
+            ch_readsToPseudoMap,
             runName
         )
         ch_salmonQuant = Salmon.out.salmonQuant
@@ -128,13 +139,17 @@ workflow {
     */
     if (!params.skipSampleReadsSTAR) {
         SeqtkSample(
-            ch_readsToAlign,
+            ch_readsToSample,
             params.readsSampleSize
         )
-        ch_readsToAlignSTAR = SeqtkSample.out.sampledReads
+        ch_readsToMap = SeqtkSample.out.sampledReads
     } else {
-        ch_readsToAlignSTAR = ch_readsToAlign
+        ch_readsToMap = ch_readsToSample
     }
+    ch_readsToMap.dump(
+        tag: 'ch_readsToMap',
+        pretty: true
+    )
 
 
     /*
@@ -147,7 +162,7 @@ workflow {
             params.assembly,
             file(params.genome),
             file(params.annotationsGTF),
-            ch_readsToAlignSTAR,
+            ch_readsToMap,
             runName
         )
         ch_starLogs = Star.out.logFinalOut

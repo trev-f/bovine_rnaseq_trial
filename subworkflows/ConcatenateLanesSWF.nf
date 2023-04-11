@@ -8,7 +8,7 @@ workflow ConcatenateLanesSWF {
 
     main:
         log.warn "You have selected the option to concatenate reads from different lanes. This option currently only works for single-end reads. If you have any paired-end reads, you must set parameter `skipConcatenateLanes`."
-        
+
         reads
             .map { cutSampleNameLaneNumber(it) }
             .groupTuple()
@@ -19,5 +19,5 @@ workflow ConcatenateLanesSWF {
         )
     
     emit:
-        ch_catReads = ConcatenateFastq.out.catReads
+        catReads = ConcatenateFastq.out.catReads
 }
