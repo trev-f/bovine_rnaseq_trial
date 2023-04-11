@@ -10,8 +10,6 @@ process ConcatenateFastq {
         tuple val(metadata), path('*.fastq.gz'), emit: catReads
     
     script:
-        log.info "Reads to concatenate for ${metadata.sampleName}: ${reads}"
-
         """
         cat ${reads} > ${metadata.sampleName}.fastq.gz
         """
