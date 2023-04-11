@@ -76,22 +76,22 @@ workflow {
     ---------------------------------------------------------------------
     */
     // Set channel of reads to align 
-    if (!params.forceAlignRawReads) {
-        if (!params.skipTrimReads) {
-            ch_readsToAlign = ch_readsTrimmed
-        } else {
-            ch_readsToAlign = ch_readsRaw
-        }
-    } else {
+    if (params.forceAlignRawReads || params.skipTrimReads) {
         ch_readsToAlign = ch_readsRaw
+    } else {
+        ch_readsToAlign = ch_readsTrimmed
     }
+    ch_readsToAlign
+        .dump(tag: 'ch_readsToAlign', pretty: true)
 
 
+    /*
     if (!params.skipConcatenateLanes) {
         ConcatenateLanes(
             ch_readsToAlign
         )
     }
+    */
 
 
     /*
@@ -99,7 +99,6 @@ workflow {
         Salmon
     ---------------------------------------------------------------------
     */
-    ch_readsToAlign.view()
     if (!params.skipSalmon) {
         Salmon(
             params.assembly,
@@ -128,7 +127,6 @@ workflow {
     } else {
         ch_readsToAlignSTAR = ch_readsToAlign
     }
-    
 
 
     /*
