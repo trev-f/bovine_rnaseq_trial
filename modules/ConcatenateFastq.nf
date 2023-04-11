@@ -1,4 +1,6 @@
 process ConcatenateFastq {
+    tag "${metadata.sampleName}"
+
     label 'base'
 
     input:
