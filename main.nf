@@ -26,6 +26,10 @@ workflow {
         file(params.design)
     )
     ch_readsRaw = ParseDesign.out.samples
+    ch_readsRaw.dump(
+        tag: 'ch_readsRaw',
+        pretty: true
+    )
 
 
     /*
@@ -47,6 +51,10 @@ workflow {
         ch_readsTrimmed = Channel.empty()
         ch_fastpJson    = Channel.empty()
     }
+    ch_readsTrimmed.dump(
+        tag: 'ch_readsTrimmed',
+        pretty: true
+    )
 
 
     /*
