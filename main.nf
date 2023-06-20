@@ -1,6 +1,7 @@
 nextflow.enable.dsl=2
 
 include { ParseDesignSWF   as ParseDesign } from "${projectDir}/subworkflows/ParseDesignSWF.nf"
+include { ProcessReferencesSWF as ProcessReferences } from "${projectDir}/subworkflows/ProcessReferencesSWF.nf"
 include { TrimReadsSWF     as TrimReads     } from "${projectDir}/subworkflows/TrimReadsSWF.nf"
 include { ReadsQCSWF       as ReadsQC       } from "${projectDir}/subworkflows/ReadsQCSWF.nf"
 include { ConcatenateLanesSWF as ConcatenateLanes } from "./subworkflows/ConcatenateLanesSWF.nf"
@@ -8,8 +9,8 @@ include { SalmonSWF        as Salmon        } from "${projectDir}/subworkflows/S
 include { SeqtkSample                       } from "${projectDir}/modules/SeqtkSample.nf"
 include { StarSWF          as Star          } from "${projectDir}/subworkflows/StarSWF.nf"
 include { SamtoolsSortIndex                 } from "${projectDir}/modules/SamtoolsSortIndex.nf"
+include { RnaseqQCSWF      as RnaseqQC      } from "./subworkflows/RnaseqQCSWF.nf"
 include { FeatureCountsSWF as FeatureCounts } from "${projectDir}/subworkflows/FeatureCountsSWF.nf"
-include { ProcessReferencesSWF as ProcessReferences } from "${projectDir}/subworkflows/ProcessReferencesSWF.nf"
 include { FullMultiQC                       } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -41,6 +42,7 @@ workflow {
         params.assembly,
         params.annotationsGTF
     )
+    ch_annotationsGTF   = ProcessReferences.out.annotationsGTF
     ch_annotationsGFF   = ProcessReferences.out.annotationsGFF
     ch_annotationsBED12 = ProcessReferences.out.annotationsBED12
 
@@ -174,7 +176,7 @@ workflow {
         Star(
             params.assembly,
             file(params.genome),
-            file(params.annotationsGTF),
+            ch_annotationsGTF,
             ch_readsToMap,
             runName
         )
@@ -195,6 +197,20 @@ workflow {
         ch_bams
     )
     ch_indexedBams = SamtoolsSortIndex.out.bamIndexed
+
+
+    /*
+    ---------------------------------------------------------------------
+        Perform RNA-seq specific QC
+    ---------------------------------------------------------------------
+    */
+    if (!params.skipRnaseqQC) {
+        RnaseqQC(
+            ch_indexedBams,
+            ch_annotationsGTF,
+            runName
+        )
+    }
 
 
     /*
