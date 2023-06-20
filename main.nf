@@ -9,7 +9,7 @@ include { SeqtkSample                       } from "${projectDir}/modules/SeqtkS
 include { StarSWF          as Star          } from "${projectDir}/subworkflows/StarSWF.nf"
 include { SamtoolsSortIndex                 } from "${projectDir}/modules/SamtoolsSortIndex.nf"
 include { FeatureCountsSWF as FeatureCounts } from "${projectDir}/subworkflows/FeatureCountsSWF.nf"
-include { RSeQCSWF         as RSeQC         } from "${projectDir}/subworkflows/RSeQCSWF.nf"
+include { ProcessReferencesSWF as ProcessReferences } from "${projectDir}/subworkflows/ProcessReferencesSWF.nf"
 include { FullMultiQC                       } from "${projectDir}/modules/FullMultiQC.nf"
 
 
@@ -30,6 +30,19 @@ workflow {
         tag: 'ch_readsRaw',
         pretty: true
     )
+
+
+    /*
+    ---------------------------------------------------------------------
+        Process reference files
+    ---------------------------------------------------------------------
+    */
+    ProcessReferences(
+        params.assembly,
+        params.annotationsGTF
+    )
+    ch_annotationsGFF   = ProcessReferences.out.annotationsGFF
+    ch_annotationsBED12 = ProcessReferences.out.annotationsBED12
 
 
     /*
@@ -186,21 +199,6 @@ workflow {
 
     /*
     ---------------------------------------------------------------------
-        Sort and index bams
-    ---------------------------------------------------------------------
-    */
-    RSeQC(
-        params.assembly,
-        params.annotationsGTF,
-        ch_indexedBams,
-        runName
-    )
-    ch_rseqcMultiQC   = RSeQC.out.rseqcMultiQC
-    ch_annotationsGFF = RSeQC.out.annotationsGFF
-
-
-    /*
-    ---------------------------------------------------------------------
         Count reads in genes
     ---------------------------------------------------------------------
     */
@@ -229,7 +227,6 @@ workflow {
         .concat(ch_readsTrimmedFQC)
         .concat(ch_salmonQuant)
         .concat(ch_starLogs)
-        .concat(ch_rseqcMultiQC)
         .concat(ch_countsSummary)
 
     reportLabel = "${runName}"
