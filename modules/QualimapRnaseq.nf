@@ -17,7 +17,6 @@ process QualimapRnaseq {
 
     script:
         def memSize = "${(task.memory - 1.GB) as String}".replaceAll(/ GB/, "")
-        log.info memSize
         def args = task.ext.args ?: ''
 
         """
