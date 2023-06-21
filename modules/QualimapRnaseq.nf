@@ -3,8 +3,7 @@ process QualimapRnaseq {
 
     label 'qualimap'
 
-    label 'cpu_low'
-    label 'mem_mid'
+    label 'mem_high'
 
     publishDir "${params.baseDirData}/qualimap", mode: 'copy', pattern: '*'
 
@@ -20,6 +19,8 @@ process QualimapRnaseq {
         def args = task.ext.args ?: ''
 
         """
+        export JAVA_OPTS="-Djava.io.tmpdir=\${PWD}"
+
         qualimap rnaseq \
             -bam ${bam} \
             -gtf ${gtf} \
