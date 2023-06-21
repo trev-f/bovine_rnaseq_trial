@@ -36,4 +36,7 @@ workflow RnaseqQCSWF {
             toolLabel,
             ch_rnaseqQCMultiQC.collect()
         )
+    
+    emit:
+        rnaseqQCMultiQC = ch_rnaseqQCMultiQC
 }

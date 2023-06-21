@@ -210,6 +210,9 @@ workflow {
             ch_annotationsGTF,
             runName
         )
+        ch_rnaseqQCMultiQC = RnaseqQC.out.rnaseqQCMultiQC
+    } else {
+        ch_rnaseqQCMultiQC = Channel.empty()
     }
 
 
@@ -243,6 +246,7 @@ workflow {
         .concat(ch_readsTrimmedFQC)
         .concat(ch_salmonQuant)
         .concat(ch_starLogs)
+        .concat(ch_rnaseqQCMultiQC)
         .concat(ch_countsSummary)
 
     reportLabel = "${runName}"
