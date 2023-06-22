@@ -24,7 +24,7 @@ process StarGenerateGenomeIndexes {
         STAR \
             --runMode genomeGenerate \
             --genomeFastaFiles genome.fasta \
-            --sjdbGTFfile annotations.gtf \
+            --sjdbGTFfile ${annotationsGTF} \
             --sjdbOverhang 100 \
             --genomeDir star_index \
             --runThreadN ${task.cpus}
