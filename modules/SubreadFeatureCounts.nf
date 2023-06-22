@@ -20,9 +20,11 @@ process SubreadFeatureCounts {
         def args = task.ext.args ?: ''
 
         """
+        grep -v 'gene_id ""' ${gtf} > annotations.gtf
+
         featureCounts \
             -T ${task.cpus} \
-            -a ${gtf} -F GTF \
+            -a annotations.gtf -F GTF \
             -o ${metadata.sampleName}.txt \
             ${args} \
             ${bam}
