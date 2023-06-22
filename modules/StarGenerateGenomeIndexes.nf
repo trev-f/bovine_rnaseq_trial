@@ -20,7 +20,6 @@ process StarGenerateGenomeIndexes {
     script:
         """
         gunzip -c ${genome} > genome.fasta
-        gunzip -c ${annotationsGTF} > annotations.gtf
         mkdir star_index
         STAR \
             --runMode genomeGenerate \
