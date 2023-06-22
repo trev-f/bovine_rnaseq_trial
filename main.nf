@@ -224,7 +224,7 @@ workflow {
     if (!params.skipFeatureCounts) {
         FeatureCounts(
             ch_indexedBams,
-            ch_annotationsGFF,
+            ch_annotationsGTF,
             runName
         )
         ch_counts        = FeatureCounts.out.counts

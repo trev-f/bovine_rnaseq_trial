@@ -4,7 +4,7 @@ include { MultiQCIntermediate as FeatureCountsMultiQC } from "${projectDir}/modu
 workflow FeatureCountsSWF {
     take:
         indexedBams
-        annotationsGFF
+        annotationsGTF
         runName
 
 
@@ -16,7 +16,7 @@ workflow FeatureCountsSWF {
         */
         SubreadFeatureCounts(
             indexedBams,
-            annotationsGFF
+            annotationsGTF
         )
         ch_counts = SubreadFeatureCounts.out.counts
         ch_countsSummary = SubreadFeatureCounts.out.countsSummary

@@ -10,7 +10,7 @@ process SubreadFeatureCounts {
 
     input:
         tuple val(metadata), path(bam), path(bai)
-        path gff
+        path gtf
 
     output:
         tuple val(metadata), path('*.txt'), emit: counts
@@ -22,7 +22,7 @@ process SubreadFeatureCounts {
         """
         featureCounts \
             -T ${task.cpus} \
-            -a ${gff} -F GTF \
+            -a ${gtf} -F GTF \
             -o ${metadata.sampleName}.txt \
             ${args} \
             ${bam}
